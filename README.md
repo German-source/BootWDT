@@ -2,9 +2,7 @@
 [![PIO](https://badges.registry.platformio.org/packages/gyverlibs/library/GyverWDT.svg)](https://registry.platformio.org/libraries/gyverlibs/GyverWDT)
 [![Foo](https://img.shields.io/badge/Website-AlexGyver.ru-blue.svg?style=flat-square)](https://alexgyver.ru/)
 [![Foo](https://img.shields.io/badge/%E2%82%BD%24%E2%82%AC%20%D0%9F%D0%BE%D0%B4%D0%B4%D0%B5%D1%80%D0%B6%D0%B0%D1%82%D1%8C-%D0%B0%D0%B2%D1%82%D0%BE%D1%80%D0%B0-orange.svg?style=flat-square)](https://alexgyver.ru/support_alex/)
-[![Foo](https://img.shields.io/badge/README-ENGLISH-blueviolet.svg?style=flat-square)](https://github-com.translate.goog/GyverLibs/GyverWDT?_x_tr_sl=ru&_x_tr_tl=en)  
-
-[![Foo](https://img.shields.io/badge/ПОДПИСАТЬСЯ-НА%20ОБНОВЛЕНИЯ-brightgreen.svg?style=social&logo=telegram&color=blue)](https://t.me/GyverLibs)
+[![Foo](https://img.shields.io/badge/README-ENGLISH-blueviolet.svg?style=flat-square)](https://github-com.translate.goog/GyverLibs/GyverWDT?_x_tr_sl=ru&_x_tr_tl=en)
 
 # BootWDT
 Библиотека для управления WDT на AVR ATmega328p/32U4/2560 & ATtiny85/84/167 со старым загрузчиком.
@@ -12,7 +10,9 @@
 - Настройка прерываний
 
 ### Совместимость
-AVR ATmega328p/32U4/2560 & ATtiny85/84/167
+AVR ATmega328p/32U4/2560 & ATtiny85/84/167.
+[WARNING!]
+Библиотека не совместима с GyverWDT.h!
 
 ## Содержание
 - [Установка](#install)
@@ -24,11 +24,11 @@ AVR ATmega328p/32U4/2560 & ATtiny85/84/167
 
 <a id="install"></a>
 ## Установка
-- Библиотеку можно найти по названию **GyverWDT** и установить через менеджер библиотек в:
+- Библиотеку можно найти по названию **BootWDT** и установить через менеджер библиотек в:
     - Arduino IDE
     - Arduino IDE v2
     - PlatformIO
-- [Скачать библиотеку](https://github.com/GyverLibs/GyverWDT/archive/refs/heads/main.zip) .zip архивом для ручной установки:
+- [Скачать библиотеку](https://github.com/German-source/BootWDT/archive/refs/heads/main.zip) .zip архивом для ручной установки:
     - Распаковать и положить в *C:\Program Files (x86)\Arduino\libraries* (Windows x64)
     - Распаковать и положить в *C:\Program Files\Arduino\libraries* (Windows x32)
     - Распаковать и положить в *Документы/Arduino/libraries/*
@@ -50,6 +50,7 @@ AVR ATmega328p/32U4/2560 & ATtiny85/84/167
 void reset(void);                               // сброс
 void disable(void);                             // отключить WDT
 void enable(uint8_t mode, uint8_t prescaler);   // включить WDT с настройками
+void reboot(void);                              // перезагрузить МК (Программно)
 // mode:
 // RESET_MODE - сброс при зависании (при тайм-ауте WDT)
 // INTERRUPT_MODE - прерывание при зависании (при тайм-ауте WDT)
@@ -107,9 +108,7 @@ ISR(WATCHDOG) {
 
 <a id="feedback"></a>
 ## Баги и обратная связь
-При нахождении багов создавайте **Issue**, а лучше сразу пишите на почту [alex@alexgyver.ru](mailto:alex@alexgyver.ru)  
-Библиотека открыта для доработки и ваших **Pull Request**'ов!
-
+При нахождении багов создавайте **Issue**, а лучше сразу пишите на почту [mail](mailto:german.pavlov.def@inbox.ru).
 
 При сообщении о багах или некорректной работе библиотеки нужно обязательно указывать:
 - Версия библиотеки
