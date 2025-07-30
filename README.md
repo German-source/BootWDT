@@ -6,16 +6,13 @@
 
 [![Foo](https://img.shields.io/badge/ПОДПИСАТЬСЯ-НА%20ОБНОВЛЕНИЯ-brightgreen.svg?style=social&logo=telegram&color=blue)](https://t.me/GyverLibs)
 
-# GyverWDT
-Библиотека для управления WDT на AVR ATmega328p/32U4/2560 & ATtiny85/84/167
+# BootWDT
+Библиотека для управления WDT на AVR ATmega328p/32U4/2560 & ATtiny85/84/167 со старым загрузчиком.
 - Настройка режима работы WDT
 - Настройка прерываний
 
 ### Совместимость
 AVR ATmega328p/32U4/2560 & ATtiny85/84/167
-
-### Документация
-К библиотеке есть [расширенная документация](https://alexgyver.ru/GyverWDT/)
 
 ## Содержание
 - [Установка](#install)
