@@ -45,16 +45,27 @@ AVR ATmega328p/32U4/2560 & ATtiny85/84/167.
 <a id="usage"></a>
 ## Использование
 ```cpp
-void reset(void);                               // сброс
-void disable(void);                             // отключить WDT
-void enable(uint8_t mode, uint8_t prescaler);   // включить WDT с настройками
-void reboot(void);                              // перезагрузить МК (Программно)
+///////////////  ФУНКЦИИ  ///////////////
+
+void reset(void);                                      // сброс
+void disable(void);                                    // отключить WDT
+void enable(uint8_t mode, uint8_t ps, void (*fn)());   // включить WDT с настройками
+void reboot(void);                                     // перезагрузить МК (Программно)
 // mode:
 // RESET_MODE - сброс при зависании (при тайм-ауте WDT)
 // INTERRUPT_MODE - прерывание при зависании (при тайм-ауте WDT)
 // INTERRUPT_RESET_MODE - первый таймаут - прерывание, второй - сброс
-// prescaler:
+// ps (prescaler):
 // WDT_PRESCALER_2, WDT_PRESCALER_4... WDT_PRESCALER_1024
+// WDT_TIMEOUT_16MS, WDT_TIMEOUT_32MS... WDT_TIMEOUT_8S
+// fn (function):
+// Функцияб которая будет вызвана при прерывании.
+
+///////////////  ПРЕРЫВАНИЯ  ///////////////
+
+void fn_name() {
+    // CODE
+}
 ```
 
 <a id="example"></a>
