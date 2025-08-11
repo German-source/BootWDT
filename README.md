@@ -50,7 +50,9 @@ AVR ATmega328p/32U4/2560 & ATtiny85/84/167.
 void reset(void);                                      // сброс
 void disable(void);                                    // отключить WDT
 void enable(uint8_t mode, uint8_t ps, void (*fn)());   // включить WDT с настройками
+void enable(uint8_t mode, uint8_t ps);                 // включить WDT с настройками
 void reboot(void);                                     // перезагрузить МК (Программно)
+void bootLoop(void);                                   // Служебная функция boot loop
 // mode:
 // RESET_MODE - сброс при зависании (при тайм-ауте WDT)
 // INTERRUPT_MODE - прерывание при зависании (при тайм-ауте WDT)

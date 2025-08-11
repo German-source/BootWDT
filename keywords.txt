@@ -1,20 +1,22 @@
 #######################################
-# Syntax Coloring Map For GyverWDT
+# Syntax Coloring Map For BootWDT
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
-
-
+BootWDT	KEYWORD1
+wdt_t	KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 GyverWDT	KEYWORD2
 Watchdog	KEYWORD2
-reset	KEYWORD2	
+reset	KEYWORD2
 disable	KEYWORD2
 enable	KEYWORD2
+reboot	KEYWORD2
+bootLoop	KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################

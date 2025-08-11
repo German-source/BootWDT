@@ -44,6 +44,7 @@
 #define RESET_MODE (1 << WDE)
 #define INTERRUPT_MODE (1 << WDIE)
 #define INTERRUPT_RESET_MODE (1 << WDE | 1 << WDIE)
+typedef void wdt_t;
 
 /* Вектор прерывания watchdog */
 #define WATCHDOG WDT_vect
@@ -113,11 +114,27 @@
 #define _WD_CONTROL_REG WDT
 #endif
 
+void (*____WDT___Fn_ST) ();
+bool ___mode_Y = false;
+bool ___ENb_t = false;
+
+ISR(WATCHDOG) {
+    if (___ENb_t == true) {
+        if (___mode_Y == true) {
+            (*____WDT___Fn_ST)();
+        } else {
+            noInterrupts();
+            asm volatile("JMP 0x00");
+        }
+    }
+}
+
 class GyverWDT {
    public:
     void reset() {            // Сбросить watchdog таймер
         asm volatile("WDR");  // ASM команда 'watchdog reset'
     }
+
     /*
       Watchdog.reset();
       Сбросить watchdog таймер, чтобы избежать тайм-аута
@@ -126,13 +143,42 @@ class GyverWDT {
       Можно размещать по своему усмотрению
     */
 
+    void reboot() {
+        noInterrupts();
+        asm volatile("JMP 0x00");
+    }
+
+    /*
+      Watchdog.reboot();
+      Перезагрузить контроллер
+    */
+
+    void bootLoop() {
+        pinMode(LED_BUILTIN, OUTPUT);
+        bool flag = false;
+        uint8_t t = 0;
+        while(t < 10) {
+            digitalWrite(LED_BUILTIN, flag);
+            flag != flag;
+            delay(500);
+            t ++;
+        }
+        reboot();
+    }
+
+    /*
+      Watchdog.bootLoop();
+      Аварийный цикл выхода.
+    */
+
     void disable() {                                   // Сбросить watchdog таймер
         uint8_t _SREG_COPY = SREG;                     // Сохраняем SREG (и настройки глобальных прерываний)
-        noInterrupts();                                // Запрещаем глобальные прерывания
+        noInterrupts(); ___ENb_t = false;              // Запрещаем глобальные прерывания
         _WD_CONTROL_REG = ((1 << WDCE) | (1 << WDE));  // Разблокировка доступа к watchdog, см. документацию на МК
         _WD_CONTROL_REG = 0x00;                        // Очищаем все настройки watchdog
         SREG = _SREG_COPY;                             // Возвращаем SREG и прерывания, если они были включены до этого
     }
+
     /*
       Watchdog.disable();
       Остановить watchdog таймер
@@ -141,7 +187,8 @@ class GyverWDT {
       Можно использовать перед выполнением долгих атомарных операций
     */
 
-    void enable(uint8_t mode, uint8_t prescaler) {                                                  // Настроить и запустить watchdog таймер
+    void enable(uint8_t mode, uint8_t prescaler, void (*fn)()) {                                    // Настроить и запустить watchdog таймер
+        ____WDT___Fn_ST = fn; ___ENb_t = true; ___mode_Y = true;                                    // Включить контроль прерываний
         uint8_t _WDT_REG = mode | ((prescaler > 7) ? ((1 << WDP3) | (prescaler - 8)) : prescaler);  // Cоставляем содержимое регистра WDT
         uint8_t _SREG_COPY = SREG;                                                                  // Сохраняем SREG (и настройки глобальных прерываний)
         noInterrupts();                                                                             // Запрещаем глобальные прерывания
@@ -149,6 +196,17 @@ class GyverWDT {
         _WD_CONTROL_REG = _WDT_REG;                                                                 // Сразу же загружаем готовые настройки watchdog
         SREG = _SREG_COPY;                                                                          // Возвращаем SREG и прерывания, если они были включены до этого
     }
+
+    void enable(uint8_t mode, uint8_t prescaler) {                                                  // Настроить и запустить watchdog таймер
+        ___ENb_t = true; ___mode_Y = false; mode = INTERRUPT_MODE;                                  // Включить контроль прерываний
+        uint8_t _WDT_REG = mode | ((prescaler > 7) ? ((1 << WDP3) | (prescaler - 8)) : prescaler);  // Cоставляем содержимое регистра WDT
+        uint8_t _SREG_COPY = SREG;                                                                  // Сохраняем SREG (и настройки глобальных прерываний)
+        noInterrupts();                                                                             // Запрещаем глобальные прерывания
+        _WD_CONTROL_REG = ((1 << WDCE) | (1 << WDE));                                               // Разблокировка доступа к watchdog, см. документацию на МК
+        _WD_CONTROL_REG = _WDT_REG;                                                                 // Сразу же загружаем готовые настройки watchdog
+        SREG = _SREG_COPY;                                                                          // Возвращаем SREG и прерывания, если они были включены до этого
+    }
+
     /*
       Watchdog.enable(mode, prescaler);
       Запустить watchdog таймер с новыми параметрами
